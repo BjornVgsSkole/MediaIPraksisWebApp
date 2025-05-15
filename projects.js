@@ -59,7 +59,32 @@ export default {
         db.close();
         
         console.log("DbClosed");
-    } 
+    }, 
+
+    async InsertProject(clientName, title, workDescription) {
+        try{
+            // Connect to the database in a physical file
+            const db = new sqlite.Database(dbPath);
+
+            try {
+                let dbInsert = await execute(db, "insert into projects(clientName, title, workDescription) \
+                                                  values(?,?,?)",
+                                                 [clientName, title, workDescription]);
+                //console.log("dbInsert", dbInsert);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                // Close the connection when you're done
+                db.close();
+            }
+
+            return {success: true, message: "New project created." }; 
+        }
+        catch(ex){
+            return {success: false, message: "Insert project failed." };    
+        }
+    }
+
 }
 
 async function db_all(query, db){
@@ -70,3 +95,25 @@ async function db_all(query, db){
          });
     });
 }
+
+const execute = async (db, sql, params = []) => {
+  if (params && params.length > 0) {
+    return new Promise((resolve, reject) => {
+      db.run(sql, params, (err) => {
+        if (err) 
+            reject(err);
+        
+        //console.log("DbInsertId-1", db.lastInsertRowId);
+
+        resolve();
+      });
+    });
+  }
+  return new Promise((resolve, reject) => {
+    db.exec(sql, (err) => {
+      if (err) reject(err);
+      //console.log("DbInsertId-2", db.lastInsertRowId);
+      resolve();
+    });
+  });
+};

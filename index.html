@@ -14,12 +14,43 @@
     </head>
     <script>
         
-        
-
+        //Wait until DOM objects are loaded
         window.addEventListener("DOMContentLoaded", function() {
-            
             GetProjects();
         }, false);
+
+        function OpenNewProjectForm(){
+            document.getElementById("divFrontPageContainer").style.display = "none"; 
+            document.getElementById("divAddProjectContainer").style.display = "block";    
+        }
+
+        async function CreateNewProject(){
+            document.getElementById("txtCreateNewProject").textContent  = "Lagrer...";
+
+            let clientName = document.getElementById("txtClientName").value;
+            let projectTitle = document.getElementById("txtTitle").value;
+            let workDescription = document.getElementById("txtWorkDescription").value;
+
+            console.log("values", clientName + " " + projectTitle + " " + workDescription);
+
+            //.post("/postNewProject", { clientName: clientName, title: projectTitle }, function(data, status){
+            //    console.log("postNewProject", data + " status: " + status);
+            //});
+
+            const response = await fetch("/postNewProject", {
+                method: "POST",
+                body: JSON.stringify({ clientName: clientName, title: projectTitle }),
+                headers: {"Content-Type": "application/json"},
+            });
+            let responseJson = await response.json();
+            console.log("responseJsonCreate", responseJson);
+            if(responseJson.success == true){
+                console.log("CreatedOK");
+            }
+
+
+            
+        }
 
         async function GetProjects() {
             
@@ -41,8 +72,6 @@
                     
                     
                 }
-                //let myText = await myObject.text();
-                //document.getElementById("demo").innerHTML = myText;
             }
             else{
                 console.log("Error", "getAllProjects: " + responseJson.message);   
@@ -56,33 +85,49 @@
             <h2 style="font-size:35px;">BOOK EN ELEV</h2>
         </div>
         
-        <div style="text-align: center;margin-top:20px;">
-            <div id="divProjectsList">
-                <a class="divProjectItemTemplate" style="width:300px;height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;">
-                    <div style="text-align: center;margin:10px;">
-                        <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
-                        <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
+        <div id="divFrontPageContainer">
+            <div style="text-align: center;margin-top:20px;">
+                <div id="divProjectsList">
+                    <a class="divProjectItemTemplate" style="width:300px;height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;">
+                        <div style="text-align: center;margin:10px;">
+                            <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
+                            <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
 
-                        <div style="height: 100px;overflow: hidden;">
-                            <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">EMNE</p>
-                            <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
+                            <div style="height: 100px;overflow: hidden;">
+                                <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">EMNE</p>
+                                <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
+                            </div>
+                            
+                            <div style="height: 90px;overflow: hidden;">
+                                <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ARBEIDSOPPGAVE</p>
+                                <p style="font-size: 14px;" class="pWorkDescription">...</p>
+                            </div>
+                            
+                            <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ESTIMERT TID</p>
+                            <p style="font-size: 20px;font-weight: 600;" class="pEstimatedWorkdays">...</p>
                         </div>
-                        
-                        <div style="height: 90px;overflow: hidden;">
-                            <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ARBEIDSOPPGAVE</p>
-                            <p style="font-size: 14px;" class="pWorkDescription">...</p>
-                        </div>
-                        
-                        <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ESTIMERT TID</p>
-                        <p style="font-size: 20px;font-weight: 600;" class="pEstimatedWorkdays">...</p>
-                    </div>
-                </a>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="divAddProjectButton" style="text-align: center;margin-top:30px;">
+                <button type="button" style="padding:20px;font-size: 20px;width:300px;" onclick="OpenNewProjectForm()">Legg til prosjekt</button> 
             </div>
         </div>
         
-        <div style="text-align: center;margin-top:30px;">
-             <button type="button" style="padding:20px;font-size: 20px;width:300px;">Legg til prosjekt</button> 
+
+        <div id="divAddProjectContainer" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
+            <div style="text-align: center;margin:10px;">
+                <h2>Legg til nytt prosjekt</h2>
+                <input type="text" id="txtClientName" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Navn på bedrift/praksisplass..." >
+                <input type="text" id="txtTitle" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Tittel. F.eks. Fotograf, Innholdsskaper ..." >
+                <textarea id="txtWorkDescription" placeholder="Arbeidsbeskrivelse. Hva ønsker du at eleven skal jobbe med?" style="width:90%;padding:10px;font-size: 16px;margin:20px auto;">
+                </textarea>
+                <button id="txtCreateNewProject" type="button" style="margin-top:20px;padding:20px;font-size: 20px;width:300px;" onclick="CreateNewProject()">Legg til prosjekt</button> 
+                
+            </div>
         </div>
+
 
     </body>
 </html> 

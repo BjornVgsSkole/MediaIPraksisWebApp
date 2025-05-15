@@ -7,23 +7,31 @@ const __dirname = path.resolve();
 
 // Initialize the Express application
 const app = express();
+app.use(express.json()); //Used to parse JSON bodies. Needed to get req.body data on POST request
 
 // Define the port number for the server to listen on
 const port = parseInt(process.env.PORT) || 8080;
 
-// Define a route for the root URL ('/') and specify the response
-app.get('/', (req, res) => {
-  res.send('Hello, World!'); // Send 'Hello, World!' as the response
-});
+//let retVal = await projectsModule.InsertProject("ClientName", "Project title");
+//console.log("retVal", retVal);
 
-// Send HTML file to web browser for the URL ('/index')
-app.get('/index', function(req, res) {
+// Define a route for the root URL ('/') and specify the response
+app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 app.get('/getAllProjects', async function(req, res) {
     let retVal = await projectsModule.GetAllProjects("test");
     res.json({ success: true, message: "OK", projects: retVal.projects });
+});
+
+app.post('/postNewProject', async function(req, res) {
+    let clientName = req.body.clientName;
+    let projectTitle = req.body.title;
+    let workDescription = req.body.workDescription;
+    
+    let retVal = await projectsModule.InsertProject(clientName, projectTitle, workDescription);
+    res.json({ success: retVal.success, message: retVal.message });
 });
 
 // Start the server and have it listen on the defined port
