@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Min første webapplikasjon med SQL database</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+
+            h1   {color: #000;}
+            p    {color: #000;}
+        </style>
+    </head>
+    <script>
+        
+        
+
+        window.addEventListener("DOMContentLoaded", function() {
+            
+            GetProjects();
+        }, false);
+
+        async function GetProjects() {
+            
+            const response = await fetch("/getAllProjects");
+            let responseJson = await response.json();
+            if(responseJson.success == true){
+                console.log("responseJson", responseJson.projects);
+                
+                for(var project in responseJson.projects){
+                    console.log("Client", responseJson.projects[project].clientName);
+                    const clone = document.getElementsByClassName("divProjectItemTemplate")[0].cloneNode(true); 
+                    clone.querySelector(".pClient").innerHTML = responseJson.projects[project].clientName;
+                    clone.querySelector(".pTitle").innerHTML = responseJson.projects[project].title;
+                    clone.querySelector(".pWorkDescription").innerHTML = responseJson.projects[project].workDescription;
+                    clone.querySelector(".pEstimatedWorkdays").innerHTML = responseJson.projects[project].estimatedWorkdays + " torsdager";
+                    
+                    clone.style.display = "inline-block";
+                    document.getElementById("divProjectsList").appendChild(clone);
+                    
+                    
+                }
+                //let myText = await myObject.text();
+                //document.getElementById("demo").innerHTML = myText;
+            }
+            else{
+                console.log("Error", "getAllProjects: " + responseJson.message);   
+            }
+
+        }
+    </script>
+    <body>
+        <div style="text-align:center;">
+            <h1 style="font-size: 80px;margin-top:40px;">MEDIA I PRAKSIS</h1>
+            <h2 style="font-size:35px;">BOOK EN ELEV</h2>
+        </div>
+        
+        <div style="text-align: center;margin-top:20px;">
+            <div id="divProjectsList">
+                <a class="divProjectItemTemplate" style="width:300px;height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;">
+                    <div style="text-align: center;margin:10px;">
+                        <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
+                        <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
+
+                        <div style="height: 100px;overflow: hidden;">
+                            <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">EMNE</p>
+                            <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
+                        </div>
+                        
+                        <div style="height: 90px;overflow: hidden;">
+                            <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ARBEIDSOPPGAVE</p>
+                            <p style="font-size: 14px;" class="pWorkDescription">...</p>
+                        </div>
+                        
+                        <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ESTIMERT TID</p>
+                        <p style="font-size: 20px;font-weight: 600;" class="pEstimatedWorkdays">...</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div style="text-align: center;margin-top:30px;">
+             <button type="button" style="padding:20px;font-size: 20px;width:300px;">Legg til prosjekt</button> 
+        </div>
+
+    </body>
+</html> 
