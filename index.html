@@ -20,8 +20,12 @@
         }, false);
 
         function OpenNewProjectForm(){
+            
+            document.getElementById("txtClientName").value = "";
+            document.getElementById("txtTitle").value = "";
+            document.getElementById("txtWorkDescription").value = "";  
             document.getElementById("divFrontPageContainer").style.display = "none"; 
-            document.getElementById("divAddProjectContainer").style.display = "block";    
+            document.getElementById("divAddProjectContainer").style.display = "block";  
         }
 
         async function CreateNewProject(){
@@ -30,8 +34,9 @@
             let clientName = document.getElementById("txtClientName").value;
             let projectTitle = document.getElementById("txtTitle").value;
             let workDescription = document.getElementById("txtWorkDescription").value;
+            let estimatedWorkDays = document.getElementById("selEstimatedWorkDays").value;
 
-            console.log("values", clientName + " " + projectTitle + " " + workDescription);
+            console.log("values", clientName + " " + projectTitle + " " + workDescription + " " + estimatedWorkDays);
 
             //.post("/postNewProject", { clientName: clientName, title: projectTitle }, function(data, status){
             //    console.log("postNewProject", data + " status: " + status);
@@ -39,7 +44,8 @@
 
             const response = await fetch("/postNewProject", {
                 method: "POST",
-                body: JSON.stringify({ clientName: clientName, title: projectTitle }),
+                body: JSON.stringify({ clientName: clientName, title: projectTitle, 
+                                       workDescription: workDescription, estimatedWorkDays: estimatedWorkDays }),
                 headers: {"Content-Type": "application/json"},
             });
             let responseJson = await response.json();
@@ -123,8 +129,15 @@
                 <h2>Legg til nytt prosjekt</h2>
                 <input type="text" id="txtClientName" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Navn på bedrift/praksisplass..." >
                 <input type="text" id="txtTitle" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Tittel. F.eks. Fotograf, Innholdsskaper ..." >
-                <textarea id="txtWorkDescription" placeholder="Arbeidsbeskrivelse. Hva ønsker du at eleven skal jobbe med?" style="width:90%;padding:10px;font-size: 16px;margin:20px auto;">
-                </textarea>
+                <textarea id="txtWorkDescription" placeholder="Arbeidsbeskrivelse. Hva ønsker du at eleven skal jobbe med?" style="text-align:left;width:90%;padding:10px;font-size: 16px;margin:20px auto;"></textarea>
+                <p>Hvor mange torsdager tror du arbeidet tar?</p>
+                <select id="selEstimatedWorkDays">
+                    <option value="1">1 torsdag</option>
+                    <option value="2">2 torsdager</option>
+                    <option value="3">3 torsdager</option>
+                    <option value="4">4 torsdager</option>
+                </select>
+                
                 <button id="txtCreateNewProject" type="button" style="margin-top:20px;padding:20px;font-size: 20px;width:300px;" onclick="CreateNewProject()">Legg til prosjekt</button> 
                 
             </div>

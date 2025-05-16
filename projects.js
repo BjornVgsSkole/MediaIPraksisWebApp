@@ -7,10 +7,10 @@ export default {
     async GetAllProjects(param) {
         // Connect to the database in a physical file
         const db = new sqlite.Database(dbPath);
-        console.log("dbPath","File: " + dbPath);
-        console.log("process.env.dbFile", process.env.dbFile);
-        console.error("dbPath", "File: " + dbPath);
-        console.error("process.env.dbFile", process.env.dbFile);
+        //console.log("dbPath","File: " + dbPath);
+        //console.log("process.env.dbFile", process.env.dbFile);
+        //console.error("dbPath", "File: " + dbPath);
+        //console.error("process.env.dbFile", process.env.dbFile);
         
         let arrayProjects = [];
         
@@ -67,15 +67,15 @@ export default {
         console.log("DbClosed");
     }, 
 
-    async InsertProject(clientName, title, workDescription) {
+    async InsertProject(clientName, title, workDescription, estimatedWorkDays) {
         try{
             // Connect to the database in a physical file
             const db = new sqlite.Database(dbPath);
 
             try {
-                let dbInsert = await execute(db, "insert into projects(clientName, title, workDescription) \
-                                                  values(?,?,?)",
-                                                 [clientName, title, workDescription]);
+                let dbInsert = await execute(db, "insert into projects(clientName, title, workDescription, estimatedWorkDays) \
+                                                  values(?, ?, ?, ?)",
+                                                 [clientName, title, workDescription, estimatedWorkDays]);
                 //console.log("dbInsert", dbInsert);
             } catch (err) {
                 console.log(err);
