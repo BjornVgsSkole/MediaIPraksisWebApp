@@ -30,6 +30,17 @@
 
         function OpenProjectDetails(thisElement){
             console.log("OpenProjectDetails", thisElement.getAttribute("projectId"));
+            let divProjectDetails = document.getElementById("divViewProjectDetails");
+            
+            divProjectDetails.querySelector('.divContent').style.display = "block";
+            divProjectDetails.querySelector('.divDeleteForm').style.display = "none";
+            
+            divProjectDetails.querySelector('.pClient').innerHTML = thisElement.querySelector('.pClient').innerHTML;
+            divProjectDetails.querySelector('.pTitle').innerHTML = thisElement.querySelector('.pTitle').innerHTML;
+            divProjectDetails.querySelector('.pWorkDescription').innerHTML = thisElement.querySelector('.pWorkDescription').innerHTML;
+            divProjectDetails.querySelector('.pEstimatedWorkdays').innerHTML = thisElement.querySelector('.pEstimatedWorkdays').innerHTML;
+            
+
             document.getElementById("divFrontPageContainer").style.display = "none";
             document.getElementById("divViewProjectDetails").style.display = "block";
         }
@@ -39,16 +50,34 @@
             document.getElementById("divFrontPageContainer").style.display = "block";
         }
 
-        
+        function OpenDeleteForm(thisElement){
+            let divProjectDetails = document.getElementById("divViewProjectDetails");
+            divProjectDetails.querySelector('.divContent').style.display = "none";
+            divProjectDetails.querySelector('.divDeleteForm').style.display = "block";
+        }
+
+        async function DeleteProject(thisElement){
+             document.getElementById("buttonDeleteProject").textContent  = "Sletter...";
+
+            await GetProjects();
+
+            setTimeout(function() {
+                document.getElementById("divAddProjectContainer").style.display = "none";
+                document.getElementById("divViewProjectDetails").style.display = "none";
+                            
+                let divProjectDetails = document.getElementById("divViewProjectDetails");
+                divProjectDetails.querySelector('.divContent').style.display = "block";
+                divProjectDetails.querySelector('.divDeleteForm').style.display = "none"; 
+                
+                document.getElementById("divFrontPageContainer").style.display = "block"; 
+                document.getElementById("buttonDeleteProject").textContent  = "Slett prosjekt";
+            }, 2000);
+        }
 
         function CloseAddProject(thisElement){
             document.getElementById("divAddProjectContainer").style.display = "none"; 
             document.getElementById("divFrontPageContainer").style.display = "block"; 
         }
-
-         
-
-        
 
         async function CreateNewProject(){
             document.getElementById("txtCreateNewProject").textContent  = "Lagrer...";
@@ -82,6 +111,7 @@
                 setTimeout(function() {
                     document.getElementById("divAddProjectContainer").style.display = "none"; 
                     document.getElementById("divFrontPageContainer").style.display = "block"; 
+                    document.getElementById("txtCreateNewProject").textContent  = "Legg til prosjekt";
                 }, 2000);
             }
         }
@@ -157,25 +187,28 @@
         
         <div id="divViewProjectDetails" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
             <div style="text-align: center;margin:10px;position: relative;">
-                <a style="position: absolute;right:0px;top:0px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseProjectDetails()">X</a>
+                <a style="position: absolute;left:0px;top:-20px;font-size: 20px;padding:5px;cursor: pointer;" onclick="OpenDeleteForm()">...</a>
+                <a style="position: absolute;right:0px;top:-20px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseProjectDetails()">X</a>
                 
-                <div style="height: 100px;overflow: hidden;">
+                <div class="divContent">
                     <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
                     <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
-                </div>
-                
-                <div style="height: 100px;overflow: hidden;">
+                    
                     <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">EMNE</p>
                     <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
-                </div>
-                
-                <div style="height: 90px;overflow: hidden;">
+                    
                     <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ARBEIDSOPPGAVE</p>
                     <p style="font-size: 14px;" class="pWorkDescription">...</p>
+                    
+                    <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ESTIMERT TID</p>
+                    <p style="font-size: 20px;font-weight: 600;" class="pEstimatedWorkdays">...</p>
+                </div>
+                <div class="divDeleteForm" style="margin-bottom:50px;display:none;">
+                    <p style="margin-top:50px;font-size: 22px;font-weight: 600;">SLETT PROSJEKT</p>
+                    <input type="text" id="txtClientEmailOnDelete" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Din e-post adresse..." >
+                    <button id="buttonDeleteProject" type="button" style="margin-top:20px;padding:20px;font-size: 20px;width:300px;" onclick="DeleteProject()">Slett prosjekt</button> 
                 </div>
                 
-                <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ESTIMERT TID</p>
-                <p style="font-size: 20px;font-weight: 600;" class="pEstimatedWorkdays">...</p>
             </div>
         </div>
 
