@@ -1,5 +1,6 @@
 import sqlite from 'sqlite3';
-const dbPath = './database.db'; // Path to the database file
+//const dbPath = './database.db'; // Path to the database file
+const dbPath = process.env.dbFile || "./database.db";
 
 export default {
     
