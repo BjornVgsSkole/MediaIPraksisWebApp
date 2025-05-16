@@ -9,6 +9,9 @@ export default {
         const db = new sqlite.Database(dbPath);
         console.log("dbPath","File: " + dbPath);
         console.log("process.env.dbFile", process.env.dbFile);
+        console.error("dbPath", "File: " + dbPath);
+        console.error("process.env.dbFile", process.env.dbFile);
+        
         let arrayProjects = [];
         
         // Database operations
