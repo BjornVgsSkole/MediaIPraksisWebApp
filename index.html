@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Min første webapplikasjon med SQL database</title>
+        <title>Media i praksis | Medielinja på Nesodden vgs</title>
         <style>
             * {
                 padding: 0;
@@ -27,6 +27,28 @@
             document.getElementById("divFrontPageContainer").style.display = "none"; 
             document.getElementById("divAddProjectContainer").style.display = "block";  
         }
+
+        function OpenProjectDetails(thisElement){
+            console.log("OpenProjectDetails", thisElement.getAttribute("projectId"));
+            document.getElementById("divFrontPageContainer").style.display = "none";
+            document.getElementById("divViewProjectDetails").style.display = "block";
+        }
+
+        function CloseProjectDetails(thisElement){
+            document.getElementById("divViewProjectDetails").style.display = "none";
+            document.getElementById("divFrontPageContainer").style.display = "block";
+        }
+
+        
+
+        function CloseAddProject(thisElement){
+            document.getElementById("divAddProjectContainer").style.display = "none"; 
+            document.getElementById("divFrontPageContainer").style.display = "block"; 
+        }
+
+         
+
+        
 
         async function CreateNewProject(){
             document.getElementById("txtCreateNewProject").textContent  = "Lagrer...";
@@ -55,10 +77,13 @@
             console.log("responseJsonCreate", responseJson);
             if(responseJson.success == true){
                 console.log("CreatedOK");
+                await GetProjects();
+
+                setTimeout(function() {
+                    document.getElementById("divAddProjectContainer").style.display = "none"; 
+                    document.getElementById("divFrontPageContainer").style.display = "block"; 
+                }, 2000);
             }
-
-
-            
         }
 
         async function GetProjects() {
@@ -67,10 +92,14 @@
             let responseJson = await response.json();
             if(responseJson.success == true){
                 console.log("responseJson", responseJson.projects);
-                
+                document.querySelectorAll(".divProjectItem").forEach(el => el.remove());
                 for(var project in responseJson.projects){
-                    console.log("Client", responseJson.projects[project].clientName);
+                    //console.log("Client", responseJson.projects[project].clientName);
                     const clone = document.getElementsByClassName("divProjectItemTemplate")[0].cloneNode(true); 
+                    clone.classList.remove("divProjectItemTemplate");
+                    clone.classList.add("divProjectItem");
+                    clone.setAttribute("projectId", responseJson.projects[project].projectId);
+
                     clone.querySelector(".pClient").innerHTML = responseJson.projects[project].clientName;
                     clone.querySelector(".pTitle").innerHTML = responseJson.projects[project].title;
                     clone.querySelector(".pWorkDescription").innerHTML = responseJson.projects[project].workDescription;
@@ -91,13 +120,13 @@
     <body>
         <div style="text-align:center;">
             <h1 style="font-size: 80px;margin-top:40px;">MEDIA I PRAKSIS</h1>
-            <h2 style="font-size:35px;">BOOK EN ELEV</h2>
+            <h2 style="font-size:35px;">FÅ EN ELEV PÅ LAGET</h2>
         </div>
         
         <div id="divFrontPageContainer">
             <div style="text-align: center;margin-top:20px;">
                 <div id="divProjectsList">
-                    <a class="divProjectItemTemplate" style="width:300px;height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;">
+                    <a class="divProjectItemTemplate" projectId="0" style="width:300px;height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;" onclick="OpenProjectDetails(this);">
                         <div style="text-align: center;margin:10px;">
                             <div style="height: 100px;overflow: hidden;">
                                 <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
@@ -126,9 +155,33 @@
             </div>
         </div>
         
+        <div id="divViewProjectDetails" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
+            <div style="text-align: center;margin:10px;position: relative;">
+                <a style="position: absolute;right:0px;top:0px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseProjectDetails()">X</a>
+                
+                <div style="height: 100px;overflow: hidden;">
+                    <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
+                    <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
+                </div>
+                
+                <div style="height: 100px;overflow: hidden;">
+                    <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">EMNE</p>
+                    <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
+                </div>
+                
+                <div style="height: 90px;overflow: hidden;">
+                    <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ARBEIDSOPPGAVE</p>
+                    <p style="font-size: 14px;" class="pWorkDescription">...</p>
+                </div>
+                
+                <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">ESTIMERT TID</p>
+                <p style="font-size: 20px;font-weight: 600;" class="pEstimatedWorkdays">...</p>
+            </div>
+        </div>
 
         <div id="divAddProjectContainer" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
-            <div style="text-align: center;margin:10px;">
+            <div style="text-align: center;margin:10px;position: relative;">
+                <a style="position: absolute;right:0px;top:0px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseAddProject()">X</a>
                 <h2>Legg til nytt prosjekt</h2>
                 <input type="text" id="txtClientName" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Navn på bedrift/praksisplass..." >
                 <input type="text" id="txtTitle" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Tittel. F.eks. Fotograf, Innholdsskaper ..." >
@@ -147,7 +200,11 @@
                 
             </div>
         </div>
+        <div id="divFooter" style="margin-top:40px;margin-bottom:40px;text-align: center;">
+            <p style="font-size: 14px;color:#666;line-height: 14px;">LES MER OM OSS PÅ</p>
+            <a href="https://afk.no/nesodden-vgs/utdanningstilbud/informasjonsteknologi-og-medieproduksjon/" target="_blank" style="font-size: 20px;color:cornflowerblue;" >Medielinja på Nesodden videregående skole</a>
 
+        </div>
 
     </body>
 </html> 
