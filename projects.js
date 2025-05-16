@@ -7,6 +7,8 @@ export default {
     async GetAllProjects(param) {
         // Connect to the database in a physical file
         const db = new sqlite.Database(dbPath);
+        console.log("dbPath","File: " + dbPath);
+        console.log("process.env.dbFile", process.env.dbFile);
         let arrayProjects = [];
         
         // Database operations
