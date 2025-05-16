@@ -35,7 +35,9 @@
             let projectTitle = document.getElementById("txtTitle").value;
             let workDescription = document.getElementById("txtWorkDescription").value;
             let estimatedWorkDays = document.getElementById("selEstimatedWorkDays").value;
-
+            let clientEmail = document.getElementById("txtClientEmail").value;
+            let clientPhone = document.getElementById("txtClientPhone").value;
+             
             console.log("values", clientName + " " + projectTitle + " " + workDescription + " " + estimatedWorkDays);
 
             //.post("/postNewProject", { clientName: clientName, title: projectTitle }, function(data, status){
@@ -45,7 +47,8 @@
             const response = await fetch("/postNewProject", {
                 method: "POST",
                 body: JSON.stringify({ clientName: clientName, title: projectTitle, 
-                                       workDescription: workDescription, estimatedWorkDays: estimatedWorkDays }),
+                                       workDescription: workDescription, estimatedWorkDays: estimatedWorkDays,
+                                       clientEmail: clientEmail, clientPhone: clientPhone }),
                 headers: {"Content-Type": "application/json"},
             });
             let responseJson = await response.json();
@@ -131,12 +134,14 @@
                 <input type="text" id="txtTitle" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Tittel. F.eks. Fotograf, Innholdsskaper ..." >
                 <textarea id="txtWorkDescription" placeholder="Arbeidsbeskrivelse. Hva ønsker du at eleven skal jobbe med?" style="text-align:left;width:90%;padding:10px;font-size: 16px;margin:20px auto;"></textarea>
                 <p>Hvor mange torsdager tror du arbeidet tar?</p>
-                <select id="selEstimatedWorkDays">
+                <select id="selEstimatedWorkDays" style="display: block;margin: 0 auto;padding: 10px;width: 300px;font-size: 16px;">
                     <option value="1">1 torsdag</option>
                     <option value="2">2 torsdager</option>
                     <option value="3">3 torsdager</option>
                     <option value="4">4 torsdager</option>
                 </select>
+                <input type="text" id="txtClientEmail" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Din e-post adresse..." >
+                <input type="text" id="txtClientPhone" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Ditt mobilnummer..." >
                 
                 <button id="txtCreateNewProject" type="button" style="margin-top:20px;padding:20px;font-size: 20px;width:300px;" onclick="CreateNewProject()">Legg til prosjekt</button> 
                 

@@ -30,8 +30,10 @@ app.post('/postNewProject', async function(req, res) {
     let projectTitle = req.body.title;
     let workDescription = req.body.workDescription;
     let estimatedWorkDays = req.body.estimatedWorkDays;
+    let clientEmail = req.body.clientEmail;
+    let clientPhone = req.body.clientPhone;
     
-    let retVal = await projectsModule.InsertProject(clientName, projectTitle, workDescription, estimatedWorkDays);
+    let retVal = await projectsModule.InsertProject(clientName, projectTitle, workDescription, estimatedWorkDays, clientEmail, clientPhone);
     res.json({ success: retVal.success, message: retVal.message });
 });
 

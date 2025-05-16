@@ -67,15 +67,15 @@ export default {
         console.log("DbClosed");
     }, 
 
-    async InsertProject(clientName, title, workDescription, estimatedWorkDays) {
+    async InsertProject(clientName, title, workDescription, estimatedWorkDays, clientEmail, clientPhone) {
         try{
             // Connect to the database in a physical file
             const db = new sqlite.Database(dbPath);
 
             try {
-                let dbInsert = await execute(db, "insert into projects(clientName, title, workDescription, estimatedWorkDays) \
-                                                  values(?, ?, ?, ?)",
-                                                 [clientName, title, workDescription, estimatedWorkDays]);
+                let dbInsert = await execute(db, "insert into projects(clientName, title, workDescription, estimatedWorkDays, contactEmail, contactPhone) \
+                                                  values(?, ?, ?, ?, ?, ?)",
+                                                 [clientName, title, workDescription, estimatedWorkDays, clientEmail, clientPhone]);
                 //console.log("dbInsert", dbInsert);
             } catch (err) {
                 console.log(err);
