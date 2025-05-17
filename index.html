@@ -174,23 +174,23 @@
     </script>
     <body>
         <div style="text-align:center;">
-            <h1 style="font-size: 80px;margin-top:40px;">MEDIA I PRAKSIS</h1>
+            <h1 style="margin-top:40px;font-size: clamp(3rem, 5vw, 8rem);">MEDIA I PRAKSIS</h1>
             <h2 style="font-size:35px;">FÅ EN ELEV PÅ LAGET</h2>
         </div>
         
         <div id="divFrontPageContainer">
             <div style="text-align: center;margin-top:20px;">
                 <div id="divProjectsList">
-                    <a class="divProjectItemTemplate" projectId="0" style="width:300px;height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;" onclick="OpenProjectDetails(this);">
+                    <a class="divProjectItemTemplate" projectId="0" style="width: min(300px, 40%);height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;" onclick="OpenProjectDetails(this);">
                         <div style="text-align: center;margin:10px;">
                             <div style="height: 100px;overflow: hidden;">
-                                <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
-                                <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
+                                <p style="margin-top:25px;font-size: clamp(0.5rem, 2vw, 1rem);color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
+                                <p style="font-size: clamp(20px, 2vw, 26px);font-weight: 600;text-transform: uppercase;" class="pClient">...</p>
                             </div>
                             
                             <div style="height: 100px;overflow: hidden;">
                                 <p style="margin-top:25px;font-size: 14px;color:#ccc;line-height: 14px;">EMNE</p>
-                                <p style="font-size: 26px;font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
+                                <p style="font-size: clamp(20px, 2vw, 26px);font-weight: 600;text-transform: uppercase;" class="pTitle">...</p>
                             </div>
                             
                             <div style="height: 90px;overflow: hidden;">
@@ -210,7 +210,7 @@
             </div>
         </div>
         
-        <div id="divViewProjectDetails" projectId="0" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
+        <div id="divViewProjectDetails" projectId="0" style="width:600px;max-width:90%;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
             <div style="text-align: center;margin:10px;position: relative;">
                 <a style="position: absolute;left:0px;top:-20px;font-size: 20px;padding:5px;cursor: pointer;" onclick="OpenDeleteForm()">...</a>
                 <a style="position: absolute;right:0px;top:-20px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseProjectDetails()">X</a>
