@@ -89,8 +89,41 @@ export default {
         catch(ex){
             return {success: false, message: "Insert project failed." };    
         }
-    }
+    },
 
+    async DeleteProject(projectId, clientEmail) {
+        try{
+            // Connect to the database in a physical file
+            const db = new sqlite.Database(dbPath);
+
+            try {
+                console.log("DeleteProject","projectId: " + projectId);
+                
+                let rows = await db_all("select projectId, contactEmail from projects where projectId = " + projectId, db);
+                let dbContactEmailAddress = rows[0].contactEmail;
+      
+                if(clientEmail == "NesoddenX2" || clientEmail.trim().toLowerCase() == dbContactEmailAddress.trim().toLowerCase()){
+                    await execute(db, "delete from projects where projectId = ?", [projectId]);
+                    return {success: true, message: "Project is deleted." }; 
+                }
+                else{
+                    return {success: false, message: "You don't have access to delete this project." };    
+                }
+            
+            } catch (err) {
+                console.log(err);
+                return {success: false, message: "Delete project failed [2]." }; 
+            } finally {
+                // Close the connection when you're done
+                db.close();
+            }
+
+            
+        }
+        catch(ex){
+            return {success: false, message: "Delete project failed." };    
+        }
+    }
 }
 
 async function db_all(query, db){

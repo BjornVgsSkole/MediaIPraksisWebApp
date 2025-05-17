@@ -32,6 +32,7 @@
             console.log("OpenProjectDetails", thisElement.getAttribute("projectId"));
             let divProjectDetails = document.getElementById("divViewProjectDetails");
             
+            divProjectDetails.setAttribute("projectId", thisElement.getAttribute("projectId"));
             divProjectDetails.querySelector('.divContent').style.display = "block";
             divProjectDetails.querySelector('.divDeleteForm').style.display = "none";
             
@@ -46,6 +47,7 @@
         }
 
         function CloseProjectDetails(thisElement){
+            document.getElementById("divViewProjectDetails").setAttribute("projectId", "0");
             document.getElementById("divViewProjectDetails").style.display = "none";
             document.getElementById("divFrontPageContainer").style.display = "block";
         }
@@ -57,21 +59,44 @@
         }
 
         async function DeleteProject(thisElement){
-             document.getElementById("buttonDeleteProject").textContent  = "Sletter...";
+            document.getElementById("buttonDeleteProject").textContent  = "Sletter...";
+            let projectId = parseInt(thisElement.closest('#divViewProjectDetails').getAttribute("projectId"));
+            let emailAddress = document.getElementById("txtClientEmailOnDelete").value;
+            thisElement.closest('#divViewProjectDetails').querySelector(".pDeleteErrMsg").innerHTML = "";
+            thisElement.closest('#divViewProjectDetails').querySelector(".pDeleteErrMsg").style.display = "none";
+            console.log("DeleteProjectId", projectId + " " + emailAddress);
 
-            await GetProjects();
+            const response = await fetch("/postDeleteProject", {
+                method: "POST",
+                body: JSON.stringify({ projectId: projectId, clientEmail: emailAddress }),
+                headers: {"Content-Type": "application/json"},
+            });
+            let responseJson = await response.json();
+            console.log("responseJsonDelete", responseJson);
+            if(responseJson.success == true){
+                console.log("DeletedOK");
+                await GetProjects();
 
-            setTimeout(function() {
-                document.getElementById("divAddProjectContainer").style.display = "none";
-                document.getElementById("divViewProjectDetails").style.display = "none";
-                            
-                let divProjectDetails = document.getElementById("divViewProjectDetails");
-                divProjectDetails.querySelector('.divContent').style.display = "block";
-                divProjectDetails.querySelector('.divDeleteForm').style.display = "none"; 
+                setTimeout(function() {
+                    document.getElementById("divAddProjectContainer").style.display = "none";
+                    document.getElementById("divViewProjectDetails").style.display = "none";
+                                
+                    let divProjectDetails = document.getElementById("divViewProjectDetails");
+                    divProjectDetails.querySelector('.divContent').style.display = "block";
+                    divProjectDetails.querySelector('.divDeleteForm').style.display = "none"; 
+                    
+                    document.getElementById("divFrontPageContainer").style.display = "block"; 
+                    document.getElementById("buttonDeleteProject").textContent  = "Slett prosjekt";
+                }, 2000);
+            }
+            else{
+                setTimeout(function() {
+                    document.getElementById("buttonDeleteProject").textContent  = "Slett prosjekt";
+                    thisElement.closest('#divViewProjectDetails').querySelector(".pDeleteErrMsg").innerHTML = responseJson.message;
+                    thisElement.closest('#divViewProjectDetails').querySelector(".pDeleteErrMsg").style.display = "block";
+                }, 500);
                 
-                document.getElementById("divFrontPageContainer").style.display = "block"; 
-                document.getElementById("buttonDeleteProject").textContent  = "Slett prosjekt";
-            }, 2000);
+            }
         }
 
         function CloseAddProject(thisElement){
@@ -185,7 +210,7 @@
             </div>
         </div>
         
-        <div id="divViewProjectDetails" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
+        <div id="divViewProjectDetails" projectId="0" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
             <div style="text-align: center;margin:10px;position: relative;">
                 <a style="position: absolute;left:0px;top:-20px;font-size: 20px;padding:5px;cursor: pointer;" onclick="OpenDeleteForm()">...</a>
                 <a style="position: absolute;right:0px;top:-20px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseProjectDetails()">X</a>
@@ -206,7 +231,8 @@
                 <div class="divDeleteForm" style="margin-bottom:50px;display:none;">
                     <p style="margin-top:50px;font-size: 22px;font-weight: 600;">SLETT PROSJEKT</p>
                     <input type="text" id="txtClientEmailOnDelete" style="width: 90%;margin-top:20px;padding:10px;font-size: 16px;" placeholder="Din e-post adresse..." >
-                    <button id="buttonDeleteProject" type="button" style="margin-top:20px;padding:20px;font-size: 20px;width:300px;" onclick="DeleteProject()">Slett prosjekt</button> 
+                    <p class="pDeleteErrMsg" style="color:#ff0000;display:none;padding:10px;"></p>
+                    <button id="buttonDeleteProject" type="button" style="margin-top:20px;padding:20px;font-size: 20px;width:300px;" onclick="DeleteProject(this)">Slett prosjekt</button> 
                 </div>
                 
             </div>

@@ -37,6 +37,14 @@ app.post('/postNewProject', async function(req, res) {
     res.json({ success: retVal.success, message: retVal.message });
 });
 
+app.post('/postDeleteProject', async function(req, res) {
+    let projectId = req.body.projectId;
+    let clientEmail = req.body.clientEmail;
+        
+    let retVal = await projectsModule.DeleteProject(projectId, clientEmail);
+    res.json({ success: retVal.success, message: retVal.message });
+});
+
 // Start the server and have it listen on the defined port
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`); // Log a message to the console indicating the server is running
