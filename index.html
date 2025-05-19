@@ -2,6 +2,8 @@
 <html>
     <head>
         <title>Media i praksis | Medielinja på Nesodden vgs</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
         <style>
             * {
                 padding: 0;
@@ -10,6 +12,16 @@
 
             h1   {color: #000;}
             p    {color: #000;}
+
+            .divProjectListBox{
+                width: clamp(160px, 300px, 38%);
+                height:370px;
+                margin: 20px 20px;
+                border:1px #ccc solid;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                cursor:pointer;
+                display:none;
+            } 
         </style>
     </head>
     <script>
@@ -174,14 +186,14 @@
     </script>
     <body>
         <div style="text-align:center;">
-            <h1 style="margin-top:40px;font-size: clamp(3rem, 5vw, 8rem);">MEDIA I PRAKSIS</h1>
-            <h2 style="font-size:35px;">FÅ EN ELEV PÅ LAGET</h2>
+            <h1 style="margin-top:40px;font-size: clamp(2.5rem, 5vw, 8rem);">MEDIA I PRAKSIS</h1>
+            <h2 style="font-size: clamp(1.5rem, 2vw, 4rem);">FÅ EN ELEV PÅ LAGET</h2>
         </div>
         
         <div id="divFrontPageContainer">
             <div style="text-align: center;margin-top:20px;">
                 <div id="divProjectsList">
-                    <a class="divProjectItemTemplate" projectId="0" style="width: min(300px, 40%);height:370px;margin: 20px 20px;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);cursor:pointer;display:none;" onclick="OpenProjectDetails(this);">
+                    <a class="divProjectItemTemplate divProjectListBox" projectId="0"  onclick="OpenProjectDetails(this);">
                         <div style="text-align: center;margin:10px;">
                             <div style="height: 100px;overflow: hidden;">
                                 <p style="margin-top:25px;font-size: clamp(0.5rem, 2vw, 1rem);color:#ccc;line-height: 14px;">BEDRIFT/PRAKSISPLASS</p>
@@ -238,7 +250,7 @@
             </div>
         </div>
 
-        <div id="divAddProjectContainer" style="width:600px;margin: 40px auto;border:1px #ccc solid;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
+        <div id="divAddProjectContainer" style="width:clamp(340px, 90%, 600px);margin: 40px auto;border:1px #ccc solid;background-color: #fff; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);display:none;">
             <div style="text-align: center;margin:10px;position: relative;">
                 <a style="position: absolute;right:0px;top:0px;font-size: 20px;padding:5px;cursor: pointer;" onclick="CloseAddProject()">X</a>
                 <h2>Legg til nytt prosjekt</h2>
